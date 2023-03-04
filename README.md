@@ -1,5 +1,5 @@
 # Writer Verification
-An end to end solution to train a writer verification model using PyTorch and serve it in a Flask Webapp.
+Train a writer verification model using PyTorch and serve it in a Flask Webapp.
 
 ## Usage:
 
