@@ -4,7 +4,7 @@ from wtforms import FileField, SubmitField
 from werkzeug.utils import secure_filename
 import os
 
-from modelserver import get_score
+from webapphelper import get_score
 
 app = Flask(__name__)
 
