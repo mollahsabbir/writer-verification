@@ -1,11 +1,13 @@
 import torch
-from models import ConvNet
+import models
+import importlib
+importlib.reload(models)
 from torchvision.transforms import transforms
 class WriterVerifier:
     def __init__(self, model_path):
         model_data = torch.load(model_path)
         
-        model = ConvNet(num_channels=model_data['num_channels']
+        model = models.ConvNet(num_channels=model_data['num_channels']
                         , classes=model_data['classes']
                         , embedding_size=model_data['embedding_size']
                         , inference=True)
@@ -17,7 +19,8 @@ class WriterVerifier:
         
     def get_embedding(self, image):
         transform = transforms.Compose([
-            transforms.PILToTensor()
+            transforms.PILToTensor(),
+            transforms.Resize((100,60)),
         ])
         img_tensor = transform(image)
         print(img_tensor.shape)
