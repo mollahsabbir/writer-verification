@@ -3,6 +3,8 @@ import models
 import importlib
 importlib.reload(models)
 from torchvision.transforms import transforms
+from torch import nn
+
 class WriterVerifier:
     def __init__(self, model_path):
         model_data = torch.load(model_path)
@@ -17,15 +19,22 @@ class WriterVerifier:
         
         self.model = model
         
-    def get_embedding(self, image):
-        transform = transforms.Compose([
-            transforms.PILToTensor(),
+        self.transform = transforms.Compose([
+            transforms.ToTensor(),
             transforms.Resize((100,60)),
         ])
-        img_tensor = transform(image)
+        
+    def get_embedding(self, image):
+        img_tensor = self.transform(image)
         print(img_tensor.shape)
         
 
     def get_score(self, image_1, image_2):
-        # TODO: Implement cos_similarity_score
-        return 0.5
+        img1_t = self.transform(image_1)
+        img2_t = self.transform(image_2)
+        embedding_1 = self.model(img1_t.unsqueeze(0))
+        embedding_2 = self.model(img2_t.unsqueeze(0))
+        cos = nn.CosineSimilarity(dim=1, eps=1e-6)
+        similarity_score = cos(embedding_1, embedding_2)
+
+        return similarity_score
